@@ -35,6 +35,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
             recipe.tags.add(tag_obj)
 
+        return recipe
+
 class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view."""
 
