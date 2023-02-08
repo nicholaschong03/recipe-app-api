@@ -281,9 +281,9 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(recipes.count(), 1)
         recipe = recipes[0]
         self.assertEqual(recipe.ingredients.count(),2)
-        for ingredeint in payload["ingredients"]:
+        for ingredient in payload["ingredients"]:
             exists = recipe.ingredients.filter(
-                name = ingredeint["name"],
+                name = ingredient["name"],
                 user = self.user,
             ).exists()
             self.assertTrue(exists)
@@ -308,7 +308,7 @@ class PrivateRecipeAPITests(TestCase):
         for ingredient in payload["ingredients"]:
             exists = recipe.ingredients.filter(
                 name=ingredient['name'],
-                user=self.user
+                user=self.user,
             ).exists()
             self.assertTrue(exists)
 
@@ -325,7 +325,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertIn(new_ingredient, recipe.ingredients.all())
 
     def test_update_recipe_assign_ingredient(self):
-        """"Test assigning an existing ingredient when updating a recipe."""
+        """Test assigning an existing ingredient when updating a recipe."""
         ingredient1 = Ingredient.objects.create(user=self.user, name="Pepper")
         recipe = create_recipe(user=self.user)
         recipe.ingredients.add(ingredient1)
@@ -362,7 +362,7 @@ class PrivateRecipeAPITests(TestCase):
         r2.tags.add(tag2)
         r3 = create_recipe(user=self.user, title="Fish and chips")
 
-        params = {"tags": f"{tag1.id}, {tag2.id}"}
+        params = {"tags": f"{tag1.id},{tag2.id}"}
         res = self.client.get(RECIPES_URL, params)
 
         s1 = RecipeSerializer(r1)
@@ -382,7 +382,7 @@ class PrivateRecipeAPITests(TestCase):
         r2.ingredients.add(in2)
         r3 = create_recipe(user=self.user, title="Red Lentil Daal")
 
-        params = {"ingredient": f"{in1.id}, {in2.id}"}
+        params = {"ingredients": f"{in1.id},{in2.id}"}
         res = self.client.get(RECIPES_URL, params)
 
         s1 = RecipeSerializer(r1)
